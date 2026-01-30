@@ -14,7 +14,6 @@ local tall_overlay_path = waywall_config_path .. "resources/overlay_tall.png"
 local thin_overlay_path = waywall_config_path .. "resources/overlay_thin.png"
 local wide_overlay_path = waywall_config_path .. "resources/overlay_wide.png"
 
-local pacem_path = waywall_config_path .. "resources/paceman-tracker-0.7.1.jar"
 local nb_path = waywall_config_path .. "resources/Ninjabrain-Bot-1.5.1.jar"
 local overlay_path = waywall_config_path .. "resources/measuring_overlay.png"
 local stretched_overlay_path = waywall_config_path .. "resources/stretched_overlay.png"
@@ -49,24 +48,9 @@ local config = {
 }
 
 
--- ==== PACEMAN ====
-local is_pacem_running = function()
-    local handle = io.popen("pgrep -f 'paceman..*'")
-    local result = handle:read("*l")
-    handle:close()
-    return result ~= nil
-end
-
-local exec_pacem = function()
-    if not is_pacem_running() then
-        waywall.exec("java -jar " .. pacem_path .. " --nogui")
-    end
-end
-
-
 -- ==== NINJABRAIN ====
 local is_ninb_running = function()
-    local handle = io.popen("pgrep -f 'Ninjabrain.*jar'")
+    local handle = io.popen("ps aux | grep '[N]injabrain-Bot.*\\.jar'")
     local result = handle:read("*l")
     handle:close()
     return result ~= nil
@@ -436,22 +420,21 @@ config.actions = {
     [cfg.tall.key] = resize_helper(cfg.tall, function() resolutions.tall() end),
 
     [cfg.toggle_ninbot_key] = function()
-        if not is_ninb_running() then
+        print("DEBUG: toggle_ninbot_key pressed")
+        local running = is_ninb_running()
+        print("DEBUG: is_ninb_running() returned: " .. tostring(running))
+        
+        if not running then
+            print("DEBUG: Launching ninjabrain...")
             waywall.exec("java -Dawt.useSystemAAFontSettings=on -jar " .. nb_path)
             waywall.show_floating(true)
         else
+            print("DEBUG: Toggling floating window...")
             helpers.toggle_floating()
         end
     end,
 
     [cfg.toggle_fullscreen_key] = waywall.toggle_fullscreen,
-
-    [cfg.launch_paceman_key] = function()
-        exec_pacem()
-        if is_pacem_running() then
-            print("Paceman Running")
-        end
-    end,
 
     [cfg.toggle_remaps_key] = function()
         if rebind_text then
