@@ -50,7 +50,7 @@ local config = {
 
 -- ==== NINJABRAIN ====
 local is_ninb_running = function()
-    local handle = io.popen("ps aux | grep '[N]injabrain-Bot.*\\.jar'")
+    local handle = io.popen("exec pgrep -f 'Ninjabrain.*jar'")
     local result = handle:read("*l")
     handle:close()
     return result ~= nil
