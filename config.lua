@@ -24,7 +24,8 @@ return {
 
     -- ==== KEYBINDS ====
     -- resolution change actions
-    thin = { key = "*-Caps_Lock", f3_safe = false },
+    -- OLD  thin = { key = "*-Caps_Lock", f3_safe = false },
+    thin = { key = "*-Grave", f3_safe = false },
     wide = { key = "*-B", f3_safe = true },
     tall = { key = "*-F4", f3_safe = false },
 
@@ -41,7 +42,7 @@ return {
     remaps_text_config = { text = "remaps off", x = 100, y = 100, size = 2, color = "#000000" },
 
     res_1440 = true,
-    sens_change = { enabled = false, normal = 1.0, tall = 0.1 }, -- make sure raw input is off
+    sens_change = { enabled = true, normal = 4.06892586, tall = 0.2744873 }, -- make sure raw input is off
     enable_resize_animations = false,
 
 }
