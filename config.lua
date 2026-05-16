@@ -2,7 +2,7 @@
 return {
     -- ==== LOOKS ====
     bg_col = "#000000",
-    toggle_bg_picture = false,
+    toggle_bg_picture = true,
     text_col = "#FFFFFF",
     pie_chart_1 = "#EC6E4E",
     pie_chart_2 = "#46CE66",
@@ -13,11 +13,11 @@ return {
 
 
     -- ==== MIRRORS ====
-    e_count = { enabled = true, x = 1500, y = 400, size = 5, colorkey = false },
-    thin_pie = { enabled = true, x = 1490, y = 645, size = 4, colorkey = false }, -- Turning off colorkeying also maintains the original pie chart's dimensions and shows the percentages
-    thin_percent = { enabled = false, x = 1568, y = 1050, size = 6 },
+    e_count = { enabled = false, x = 1500, y = 400, size = 5, colorkey = false },
+    thin_pie = { enabled = true, x = 1490, y = 645, size = 4, colorkey = false }, -- colorkey=false uses shader-based pie with gray border
+    thin_percent = { enabled = true, x = 1600, y = 1100, size = 6 },
     tall_pie = { enabled = true, x = 1490, y = 645, size = 4, colorkey = false }, -- Leave same as thin for seamlessness
-    tall_percent = { enabled = false, x = 1568, y = 1050, size = 6 },             -- Leave same as thin for seamlessness
+    tall_percent = { enabled = true, x = 1600, y = 1100, size = 6 },             -- Leave same as thin for seamlessness
 
     stretched_measure = false,
 

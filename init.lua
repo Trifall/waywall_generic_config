@@ -14,9 +14,21 @@ local tall_overlay_path = waywall_config_path .. "resources/overlay_tall.png"
 local thin_overlay_path = waywall_config_path .. "resources/overlay_thin.png"
 local wide_overlay_path = waywall_config_path .. "resources/overlay_wide.png"
 
-local nb_path = waywall_config_path .. "resources/Ninjabrain-Bot-1.5.1.jar"
+local nb_path = waywall_config_path .. "resources/Ninjabrain-Bot-1.5.2.jar"
 local overlay_path = waywall_config_path .. "resources/measuring_overlay.png"
 local stretched_overlay_path = waywall_config_path .. "resources/stretched_overlay.png"
+
+local read_file = function(name)
+    local file = io.open(waywall_config_path .. name, "r")
+    if file then
+        local data = file:read("*a")
+        file:close()
+        return data
+    else
+        print("Error: File \"" .. name .. "\" not found.")
+        return ""
+    end
+end
 
 -- ==== INITS ====
 local remaps_active = true
@@ -45,6 +57,32 @@ local config = {
         tearing = false,
         scene_add_text = true,
     },
+    shaders = {
+        ["pie_chart"] = {
+            vertex = read_file("shaders/general.vert"),
+            fragment = read_file("shaders/colors.glsl") .. "\n" .. read_file("shaders/pie_chart.frag"),
+        },
+        ["pie_border"] = {
+            vertex = read_file("shaders/general.vert"),
+            fragment = read_file("shaders/colors.glsl") .. "\n" .. read_file("shaders/pie_border.frag"),
+        },
+        ["text"] = {
+            vertex = read_file("shaders/general.vert"),
+            fragment = read_file("shaders/colors.glsl") .. "\n" .. read_file("shaders/text.frag"),
+        },
+        ["text_bg"] = {
+            vertex = read_file("shaders/general.vert"),
+            fragment = read_file("shaders/colors.glsl") .. "\n" .. read_file("shaders/text_bg.frag"),
+        },
+        ["text_colored"] = {
+            vertex = read_file("shaders/general.vert"),
+            fragment = read_file("shaders/text_colored.frag"),
+        },
+        ["text_colored_bg"] = {
+            vertex = read_file("shaders/general.vert"),
+            fragment = read_file("shaders/text_colored_bg.frag"),
+        },
+    },
 }
 
 
@@ -71,6 +109,58 @@ local make_mirror = function(options)
 end
 
 local mirrors = {
+    c_e_counter = make_mirror({
+        src = { x = 1, y = 28, w = 64, h = 18 },
+        dst = { x = 1500, y = 300, w = 298, h = 84 },
+        depth = 2,
+        shader = "text",
+    }),
+    c_e_counter_shadow = make_mirror({
+        src = { x = 1, y = 28, w = 64, h = 18 },
+        dst = { x = 1505, y = 305, w = 298, h = 84 },
+        depth = 1,
+        shader = "text_bg",
+    }),
+
+    o_m_counter = make_mirror({
+        src = { x = 45, y = 154, w = 74, h = 10 },
+        dst = { x = 1500, y = 495, w = 340, h = 45 },
+        depth = 2,
+        shader = "text",
+    }),
+    o_m_counter_shadow = make_mirror({
+        src = { x = 45, y = 154, w = 74, h = 10 },
+        dst = { x = 1503, y = 498, w = 340, h = 45 },
+        depth = 1,
+        shader = "text_bg",
+    }),
+
+    pitch_counter = make_mirror({
+        src = { x = 177, y = 118, w = 80, h = 10 },
+        dst = { x = 1500, y = 550, w = 294, h = 45 },
+        depth = 2,
+        shader = "text",
+    }),
+    pitch_counter_shadow = make_mirror({
+        src = { x = 177, y = 118, w = 80, h = 10 },
+        dst = { x = 1503, y = 553, w = 294, h = 45 },
+        depth = 1,
+        shader = "text_bg",
+    }),
+
+    yaw_counter = make_mirror({
+        src = { x = 177, y = 128, w = 80, h = 10 },
+        dst = { x = 1500, y = 600, w = 294, h = 45 },
+        depth = 2,
+        shader = "text",
+    }),
+    yaw_counter_shadow = make_mirror({
+        src = { x = 177, y = 128, w = 80, h = 10 },
+        dst = { x = 1503, y = 603, w = 294, h = 45 },
+        depth = 1,
+        shader = "text_bg",
+    }),
+
     e_counter = make_mirror({
         src = { x = 13, y = 37, w = 37, h = 9 },
         dst = { x = cfg.e_count.x, y = cfg.e_count.y, w = 37 * cfg.e_count.size, h = 9 * cfg.e_count.size },
@@ -78,13 +168,6 @@ local mirrors = {
             input = "#DDDDDD",
             output = cfg.text_col,
         } or nil,
-    }),
-
-    thin_pie_all = make_mirror({
-        src = cfg.res_1440
-            and { x = 10, y = 694, w = 340, h = 221 }
-            or { x = 0, y = 674, w = 340, h = 221 },
-        dst = { x = cfg.thin_pie.x, y = cfg.thin_pie.y, w = 420 * cfg.thin_pie.size / 4, h = 273 * cfg.thin_pie.size / 4 },
     }),
 
     thin_pie_blockentities = make_mirror({
@@ -138,10 +221,6 @@ local mirrors = {
         },
     }),
 
-    tall_pie_all = make_mirror({
-        src = { x = 44, y = 15978, w = 340, h = 221 },
-        dst = { x = cfg.tall_pie.x, y = cfg.tall_pie.y, w = 420 * cfg.tall_pie.size / 4, h = 273 * cfg.tall_pie.size / 4 },
-    }),
     tall_pie_blockentities = make_mirror({
         src = { x = 44, y = 15978, w = 340, h = 178 },
         dst = { x = cfg.tall_pie.x, y = cfg.tall_pie.y, w = 420 * cfg.tall_pie.size / 4, h = 423 * cfg.tall_pie.size / 4 },
@@ -183,52 +262,48 @@ local mirrors = {
         },
     }),
 
-    thin_percent_all = make_mirror({
+    -- plain pie chart mirror (thin) - just mirrors the pie chart as-is
+    thin_pie_all = make_mirror({
         src = cfg.res_1440
-            and { x = 257, y = 879, w = 33, h = 25 }
-            or { x = 247, y = 859, w = 33, h = 25 },
-        dst = { x = cfg.thin_percent.x, y = cfg.thin_percent.y, w = 33 * cfg.thin_percent.size, h = 25 * cfg.thin_percent.size },
-    }),
-    thin_percent_blockentities = make_mirror({
-        src = cfg.res_1440
-            and { x = 257, y = 879, w = 33, h = 25 }
-            or { x = 247, y = 859, w = 33, h = 25 },
-        dst = { x = cfg.thin_percent.x, y = cfg.thin_percent.y, w = 33 * cfg.thin_percent.size, h = 25 * cfg.thin_percent.size },
-        color_key = {
-            input = "#E96D4D",
-            output = cfg.text_col,
-        },
-    }),
-    thin_percent_unspecified = make_mirror({
-        src = cfg.res_1440
-            and { x = 257, y = 879, w = 33, h = 25 }
-            or { x = 247, y = 859, w = 33, h = 25 },
-        dst = { x = cfg.thin_percent.x, y = cfg.thin_percent.y, w = 33 * cfg.thin_percent.size, h = 25 * cfg.thin_percent.size },
-        color_key = {
-            input = "#45CB65",
-            output = cfg.text_col,
-        },
+            and { x = 10, y = 694, w = 340, h = 178 }
+            or { x = 0, y = 674, w = 340, h = 178 },
+        dst = { x = cfg.thin_pie.x, y = cfg.thin_pie.y, w = 420 * cfg.thin_pie.size / 4, h = 423 * cfg.thin_pie.size / 4 },
     }),
 
-    tall_percent_all = make_mirror({
-        src = { x = 291, y = 16163, w = 33, h = 25 },
-        dst = { x = cfg.tall_percent.x, y = cfg.tall_percent.y, w = 33 * cfg.tall_percent.size, h = 25 * cfg.tall_percent.size },
+    thin_percent = make_mirror({
+        src = cfg.res_1440
+            and { x = 257, y = 879, w = 33, h = 40 }
+            or { x = 247, y = 859, w = 33, h = 38 },
+        dst = { x = cfg.thin_percent.x, y = cfg.thin_percent.y, w = 33 * cfg.thin_percent.size, h = 40 * cfg.thin_percent.size },
+        depth = 2,
+        shader = "text_colored",
     }),
-    tall_percent_blockentities = make_mirror({
-        src = { x = 291, y = 16163, w = 33, h = 25 },
-        dst = { x = cfg.tall_percent.x, y = cfg.tall_percent.y, w = 33 * cfg.tall_percent.size, h = 25 * cfg.tall_percent.size },
-        color_key = {
-            input = "#E96D4D",
-            output = cfg.text_col,
-        },
+    thin_percent_shadow = make_mirror({
+        src = cfg.res_1440
+            and { x = 257, y = 879, w = 33, h = 40 }
+            or { x = 247, y = 859, w = 33, h = 38 },
+        dst = { x = cfg.thin_percent.x + 3, y = cfg.thin_percent.y + 3, w = 33 * cfg.thin_percent.size, h = 40 * cfg.thin_percent.size },
+        depth = 1,
+        shader = "text_colored_bg",
     }),
-    tall_percent_unspecified = make_mirror({
-        src = { x = 291, y = 16163, w = 33, h = 25 },
-        dst = { x = cfg.tall_percent.x, y = cfg.tall_percent.y, w = 33 * cfg.tall_percent.size, h = 25 * cfg.tall_percent.size },
-        color_key = {
-            input = "#45CB65",
-            output = cfg.text_col,
-        },
+
+    -- plain pie chart mirror (tall) - just mirrors the pie chart as-is
+    tall_pie_all = make_mirror({
+        src = { x = 44, y = 15978, w = 340, h = 178 },
+        dst = { x = cfg.tall_pie.x, y = cfg.tall_pie.y, w = 420 * cfg.tall_pie.size / 4, h = 423 * cfg.tall_pie.size / 4 },
+    }),
+
+    tall_percent = make_mirror({
+        src = { x = 291, y = 16163, w = 33, h = 40 },
+        dst = { x = cfg.tall_percent.x, y = cfg.tall_percent.y, w = 33 * cfg.tall_percent.size, h = 40 * cfg.tall_percent.size },
+        depth = 2,
+        shader = "text_colored",
+    }),
+    tall_percent_shadow = make_mirror({
+        src = { x = 291, y = 16163, w = 33, h = 40 },
+        dst = { x = cfg.tall_percent.x + 3, y = cfg.tall_percent.y + 3, w = 33 * cfg.tall_percent.size, h = 40 * cfg.tall_percent.size },
+        depth = 1,
+        shader = "text_colored_bg",
     }),
 
     eye_measure = make_mirror({
@@ -298,42 +373,31 @@ local show_mirrors = function(f3, tall, thin, wide)
         images.measuring_overlay(tall)
     end
 
-    if cfg.e_count.enabled then
-        mirrors.e_counter(f3)
-    end
+    mirrors.c_e_counter(f3)
+    mirrors.c_e_counter_shadow(f3)
+    mirrors.o_m_counter(f3)
+    mirrors.o_m_counter_shadow(f3)
+    mirrors.pitch_counter(f3)
+    mirrors.pitch_counter_shadow(f3)
+    mirrors.yaw_counter(f3)
+    mirrors.yaw_counter_shadow(f3)
 
     if cfg.thin_pie.enabled then
-        if cfg.thin_pie.colorkey then
-            mirrors.thin_pie_entities(thin)
-            mirrors.thin_pie_unspecified(thin)
-            mirrors.thin_pie_blockentities(thin)
-            mirrors.thin_pie_destroyProgress(thin)
-            mirrors.thin_pie_prepare(thin)
-        else
-            mirrors.thin_pie_all(thin)
-        end
+        mirrors.thin_pie_all(thin)
     end
 
     if cfg.thin_percent.enabled then
-        mirrors.thin_percent_blockentities(thin)
-        mirrors.thin_percent_unspecified(thin)
+        mirrors.thin_percent(thin)
+        mirrors.thin_percent_shadow(thin)
     end
 
     if cfg.tall_pie.enabled then
-        if cfg.tall_pie.colorkey then
-            mirrors.tall_pie_entities(tall)
-            mirrors.tall_pie_unspecified(tall)
-            mirrors.tall_pie_blockentities(tall)
-            mirrors.tall_pie_destroyProgress(tall)
-            mirrors.tall_pie_prepare(tall)
-        else
-            mirrors.tall_pie_all(tall)
-        end
+        mirrors.tall_pie_all(tall)
     end
 
     if cfg.tall_percent.enabled then
-        mirrors.tall_percent_blockentities(tall)
-        mirrors.tall_percent_unspecified(tall)
+        mirrors.tall_percent(tall)
+        mirrors.tall_percent_shadow(tall)
     end
 end
 
@@ -431,6 +495,15 @@ config.actions = {
         else
             print("DEBUG: Toggling floating window...")
             helpers.toggle_floating()
+        end
+    end,
+
+    ["*-C"] = function()
+        if waywall.get_key("F3") then
+            waywall.press_key("C")
+            waywall.show_floating(true)
+        else
+            return false
         end
     end,
 
