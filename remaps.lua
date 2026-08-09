@@ -1,13 +1,7 @@
 return {
     remapped_kb = {
-        -- Add any playing remaps here
-        ["CAPSLOCK"] = "F3"
-
+        ["CAPSLOCK"] = "F3",
     },
 
-    normal_kb = {
-        -- Add any remaps you want to keep when disabling normal remaps (not necessary)
-
-    },
-
+    normal_kb = {},
 }
