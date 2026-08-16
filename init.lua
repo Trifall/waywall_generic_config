@@ -38,6 +38,16 @@ local cfg = {
     thin_percent = { enabled = false, x = 1600, y = 1100, size = 6 },
     tall_percent = { enabled = false, x = 1600, y = 1100, size = 6 },
     percentages_match_text = false,
+    mob_spawner = {
+        enabled = true,
+        x = 2280,
+        y = 1060,
+        size = 6,
+        source_size = { 2560, 1372 },
+        color = "#4DE1CA",
+        shadow = "#0f3d35",
+        shadow_offset = 3,
+    },
 
     measuring_window = { x = 94, y = 470, w = 900, h = 500 },
     stretched_measure = false,

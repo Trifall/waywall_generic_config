@@ -101,6 +101,44 @@ return function(config, cfg)
         add_res_mirror(mirror, cfg.tall_res)
     end
 
+    if cfg.mob_spawner.enabled then
+        local source_width = cfg.mob_spawner.source_size[1]
+        local source_height = cfg.mob_spawner.source_size[2]
+        local dst = {
+            x = cfg.mob_spawner.x,
+            y = cfg.mob_spawner.y,
+            w = 33 * cfg.mob_spawner.size,
+            h = 9 * cfg.mob_spawner.size,
+        }
+
+        for i = 0, 3 do
+            local src = {
+                x = source_width - 93,
+                y = source_height - 221 + 8 * i,
+                w = 33,
+                h = 9,
+            }
+
+            helpers.res_mirror({
+                src = src,
+                dst = dst,
+                depth = 3,
+                color_key = { input = "#4DE1CA", output = cfg.mob_spawner.color },
+            }, 0, 0)
+            helpers.res_mirror({
+                src = src,
+                dst = {
+                    x = dst.x + cfg.mob_spawner.shadow_offset,
+                    y = dst.y + cfg.mob_spawner.shadow_offset,
+                    w = dst.w,
+                    h = dst.h,
+                },
+                depth = 2,
+                color_key = { input = "#4DE1CA", output = cfg.mob_spawner.shadow },
+            }, 0, 0)
+        end
+    end
+
     add_res_mirror({
         src = { x = 10, y = 694, w = 340, h = 178 },
         dst = { x = 1490, y = 645, w = 420, h = 423 },
