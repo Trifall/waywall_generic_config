@@ -17,11 +17,11 @@ local cfg = {
     pie_chart_3 = "#E446C4",
 
     ninbot_anchor = {
-        position = "topright",
+        position = "right",
         x = 0,
         y = 0,
     },
-    ninbot_opacity = 1,
+    ninbot_opacity = 0.8,
 
 
     -- ==== ALTERNATIVE RESOLUTIONS ====
