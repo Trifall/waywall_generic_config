@@ -149,29 +149,41 @@ return function(config, cfg)
     }, cfg.tall_res)
 
     add_res_mirror({
-        src = { x = 257, y = 879, w = 33, h = 40 },
-        dst = { x = 1600, y = 1100, w = 198, h = 240 },
+        src = { x = 257, y = 879, w = 12, h = 40 },
+        dst = { x = 1760, y = 770, w = 65, h = 218 },
         depth = 2,
         shader = "text_colored",
     }, cfg.thin_res)
+
+    local offsets = {
+        { dx = -2, dy = -2 }, { dx = 0, dy = -2 }, { dx = 2, dy = -2 },
+        { dx = -2, dy = 0 },                      { dx = 2, dy = 0 },
+        { dx = -2, dy = 2 },  { dx = 0, dy = 2 },  { dx = 2, dy = 2 },
+    }
+    for _, offset in ipairs(offsets) do
+        add_res_mirror({
+            src = { x = 257, y = 879, w = 12, h = 40 },
+            dst = { x = 1760 + offset.dx, y = 770 + offset.dy, w = 65, h = 218 },
+            depth = 1,
+            shader = "text_colored_bg",
+        }, cfg.thin_res)
+    end
+
     add_res_mirror({
-        src = { x = 257, y = 879, w = 33, h = 40 },
-        dst = { x = 1603, y = 1103, w = 198, h = 240 },
-        depth = 1,
-        shader = "text_colored_bg",
-    }, cfg.thin_res)
-    add_res_mirror({
-        src = { x = 291, y = 16163, w = 33, h = 40 },
-        dst = { x = 1600, y = 1100, w = 198, h = 240 },
+        src = { x = 291, y = 16163, w = 12, h = 40 },
+        dst = { x = 1760, y = 770, w = 65, h = 218 },
         depth = 2,
         shader = "text_colored",
     }, cfg.tall_res)
-    add_res_mirror({
-        src = { x = 291, y = 16163, w = 33, h = 40 },
-        dst = { x = 1603, y = 1103, w = 198, h = 240 },
-        depth = 1,
-        shader = "text_colored_bg",
-    }, cfg.tall_res)
+
+    for _, offset in ipairs(offsets) do
+        add_res_mirror({
+            src = { x = 291, y = 16163, w = 12, h = 40 },
+            dst = { x = 1760 + offset.dx, y = 770 + offset.dy, w = 65, h = 218 },
+            depth = 1,
+            shader = "text_colored_bg",
+        }, cfg.tall_res)
+    end
 
     config.actions["*-C"] = function()
         if waywall.get_key("F3") then
